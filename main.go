@@ -6,6 +6,8 @@ import (
 	"net"
 	"net/url"
 	"os"
+	"os/user"
+	"path/filepath"
 	"strings"
 	"sync"
 )
@@ -22,7 +24,7 @@ var cloudflareIPs []string
 
 func main() {
 	// Load Cloudflare IPs from file
-	if err := loadCloudflareIPs("ip.conf"); err != nil {
+	if err := loadCloudflareIPs(getConfigFilePath("ip.conf")); err != nil {
 		fmt.Printf("Error loading Cloudflare IPs: %v\n", err)
 		return
 	}
@@ -85,6 +87,15 @@ func main() {
 	}
 }
 
+func getConfigFilePath(filename string) string {
+	usr, err := user.Current()
+	if err != nil {
+		fmt.Printf("Error getting current user: %v\n", err)
+		return ""
+	}
+	configDir := filepath.Join(usr.HomeDir, ".config")
+	return filepath.Join(configDir, filename)
+}
 func loadCloudflareIPs(filename string) error {
 	file, err := os.Open(filename)
 	if err != nil {

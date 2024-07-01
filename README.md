@@ -15,3 +15,6 @@ iphunter filename.txt
 iphunter filename.txt | tee domainl_ip
 cat domain_ip | grep -v cloudflare | grep -oP '^\D*\[\K[^]]+' | tr ',' '\n'
 ```
+
+
+# NOTE : save ip.conf file in ~/.config
